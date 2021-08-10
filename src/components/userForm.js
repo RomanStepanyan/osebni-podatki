@@ -26,6 +26,13 @@ const ContactForm = () => {
     fetchCityList().then(result => setCites(result));
   }, []);
 
+  //  corrected------------------------------------------------------
+  const city = cites.find(item => item.address.city === formData.city);
+  useEffect(() => {
+    setAddress(city?.address);
+  }, [city]);
+  // ----------------------------------------------------------------
+
   const handleFormSubmit = event => {
     event.preventDefault();
     if (formData.zipCode !== address.zipcode) {
@@ -75,25 +82,21 @@ const ContactForm = () => {
         <input
           type="tel"
           name="phoneNumber"
-          pattern="(\+386?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{2}\)?|\d{2})( |-|\.)?(\d{2}( |-|\.)?\d{3})"
+          pattern="(\+3+8+6\)?\d{1,2}( |-|\.)?)?(\(?\d{2}\)?|\d{2})( |-|\.)?(\d{2}( |-|\.)?\d{3})"
           title="The phone number must be 11–12 digits long and can contain numbers, spaces, hyphens, brackets and can only start with +386."
           required
           placeholder="Enter phone number"
           value={formData.phoneNumber}
           onChange={handleChange}
         />
+        {/* corrected================================================= */}
         <select name="city" onChange={handleChange}>
           {cites.map(item => {
-            return (
-              <option
-                key={item.address.city}
-                onClick={() => setAddress(item.address)}
-              >
-                {item.address.city}
-              </option>
-            );
+            return <option key={item.id}>{item.address.city}</option>;
           })}
         </select>
+        {/* =========================================================== */}
+
         <input
           type="text"
           name="zipCode"
